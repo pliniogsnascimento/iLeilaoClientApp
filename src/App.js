@@ -3,12 +3,14 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import routes from 'routes/routes';
 import Layout from 'components/Layout/Layout';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
+          <CssBaseline />
           <Layout>
             <Switch>
               {routes.map((rota, key) => {
