@@ -12,6 +12,9 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { connect } from 'react-redux';
+import * as actionCreators from 'store/actions';
+
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -47,23 +50,53 @@ const styles = theme => ({
 class Login extends Component {
 
   state = {
-    name: '',
-    email: '',
-    password: ''
+    user: {
+      email: '',
+      senha: ''
+    },
+    isShowingError: false
+  }
+
+  componentWillMount() {
+    if(this.props.user !== null)
+      this.redirectToMainPage();
   }
 
   handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value
-    });
+    let user = {...this.state.user};
+    user[name] = event.target.value
+    this.setState({user: user});
   }
 
-  handleLogin = () => {
+  clearState = () => {
+    this.setState({user:{email: '', senha: ''}});
+  }
+
+  handleLogin = event => {
+    event.preventDefault();
+    this.setState({isShowingError: false});
+    this.props.login(this.state.user);
+  }
+
+  redirectToMainPage = () => {
     this.props.history.push('/leilao');
   }
 
   render() {
     const { classes } = this.props;
+    let errorMessage = null;
+
+    if(this.props.successOnRequest)
+      this.redirectToMainPage();
+
+    if(this.props.hasError && !this.state.isShowingError) {
+      this.setState({isShowingError: true});
+      this.clearState();
+    }
+
+    if(this.props.hasError)
+      errorMessage = <Typography variant="subtitle1" style={{color: 'red'}} >* Usuário ou senha incorretos!</Typography>;
+
     return (
       <React.Fragment>
         <main className={classes.layout}>
@@ -73,43 +106,40 @@ class Login extends Component {
             </Avatar>
             <Typography variant="headline">Entrar</Typography>
             <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="name">Nome</InputLabel>
-                <Input id="name"
-                  value={this.state.name}
-                  autoComplete={false}
-                  autoFocus 
-                  onChange={this.handleChange('name')} />
-              </FormControl>
+              {errorMessage}
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>
                 <Input id="email"
                   autoComplete="email"
-                  value={this.state.email} 
+                  autoFocus
+                  error={this.props.hasError}
+                  value={this.state.user.email} 
                   onChange={this.handleChange('email')} />
               </FormControl>
+
               <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="password">Senha</InputLabel>
+                <InputLabel htmlFor="senha">Senha</InputLabel>
                 <Input
                   autoComplete="current-password"
                   type="password"
-                  value={this.state.password}
-                  onChange={this.handleChange('password')} />
+                  value={this.state.user.senha}
+                  onChange={this.handleChange('senha')} />
               </FormControl>
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Continuar conectado"
               />
-              <Button
-                type="submit"
+
+              <Button type="submit"
                 fullWidth
-                variant="raised"
+                variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={() => this.handleLogin()}
-              >
+                onClick={(event) => this.handleLogin(event)} >
                 Entrar
-            </Button>
+              </Button>
+              
             </form>
           </Paper>
         </main>
@@ -122,4 +152,19 @@ Login.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Login);
+const mapStateToProps = state => {
+  return {
+    user: state.user.user,
+    userRole: state.user.userRole,
+    hasError: state.user.hasError,
+    successOnRequest: state.user.successOnRequest
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: user => dispatch(actionCreators.login(user))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login));
