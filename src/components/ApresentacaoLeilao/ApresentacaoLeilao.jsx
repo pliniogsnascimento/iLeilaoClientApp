@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+// import Grid from '@material-ui/core/Grid';
+// import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -25,27 +25,32 @@ const apresentacaoLeilao = props => {
   return (
     <div className={classes.heroUnit}>
       <div className={classes.heroContent}>
-        <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
-          Comece a leiloar no iLeilão
-      </Typography>
-        <Typography variant="title" align="center" color="textSecondary" paragraph>
+        <Typography variant="h3" align="center" color="textPrimary" gutterBottom>
+          ILeilão
+        </Typography>
+
+        <Typography variant="subtitle1" align="center" color="textSecondary" paragraph>
           O melhor lugar para leiloar seus pertences.
           Basta adicionar o seu produto com um preço mínimo e começar!
-      </Typography>
-        <div className={classes.heroButtons}>
+        </Typography>
+
+        {/* <div className={classes.heroButtons}>
           <Grid container spacing={16} justify="center">
+
             <Grid item>
               <Button variant="contained" color="primary">
                 Publicar
-            </Button>
+              </Button>
             </Grid>
+            
             <Grid item>
               <Button variant="outlined" color="primary">
                 Buscar seus itens
-            </Button>
+              </Button>
             </Grid>
+
           </Grid>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -1,0 +1,4 @@
+export {
+  fetchProducts
+} from './products';
+

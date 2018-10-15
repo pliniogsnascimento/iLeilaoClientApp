@@ -6,12 +6,22 @@ import Layout from 'components/Layout/Layout';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 class App extends Component {
+
+  state = {
+    menuOpen: false
+  }
+
+  menuStatusChanged = () => {
+    this.setState({menuOpen: !this.state.menuOpen});
+  }
+
   render() {
     return (
       <Router>
         <div className="App">
           <CssBaseline />
-          <Layout>
+          <Layout menuOpen={this.state.menuOpen}
+            menuStatusChanged={this.menuStatusChanged}>
             <Switch>
               {routes.map((rota, key) => {
                 if(rota.redirect)
