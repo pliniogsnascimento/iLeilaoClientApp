@@ -16,6 +16,11 @@ class Leilao extends Component {
     }
   }
 
+  componentWillMount() {
+    if(this.props.user === null)
+      this.props.history.push('/');
+  }
+
   componentDidMount() {
     this.props.fetchProducts();
   }
@@ -50,7 +55,8 @@ class Leilao extends Component {
 
 const mapStateToProps = state => {
   return {
-    products: state.products.products
+    products: state.products.products,
+    user: state.user.user
   }
 }
 

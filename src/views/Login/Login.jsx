@@ -45,6 +45,17 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  register: {
+    paddingTop: theme.spacing.unit * 2,
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  registerText: {
+    cursor: 'pointer',
+    color: '#039BE5',
+    textDecoration: 'underline',
+    paddingLeft: theme.spacing.unit
+  }
 });
 
 class Login extends Component {
@@ -80,6 +91,11 @@ class Login extends Component {
 
   redirectToMainPage = () => {
     this.props.history.push('/leilao');
+  }
+
+  redirectToRegisterPage = event => {
+    event.preventDefault();
+    this.props.history.push('/register-me');
   }
 
   render() {
@@ -139,7 +155,14 @@ class Login extends Component {
                 onClick={(event) => this.handleLogin(event)} >
                 Entrar
               </Button>
-              
+
+              <Typography variant="body1" className={classes.register}>
+                Não possui conta?
+                <b className={classes.registerText} onClick={event => this.redirectToRegisterPage(event)}>
+                  Cadastre-se aqui!
+                </b>
+              </Typography>
+
             </form>
           </Paper>
         </main>

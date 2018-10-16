@@ -34,6 +34,10 @@ const styles = theme => ({
 
 const layout = props => {
   const { classes } = props;
+  // let username = null;
+
+  // if(props.user !== null)
+  //   username = props.user.nome;
 
   return (
     <div className={classes.root}>

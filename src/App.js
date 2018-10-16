@@ -4,15 +4,21 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import routes from 'routes/routes';
 import Layout from 'components/Layout/Layout';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import {connect} from 'react-redux';
 
 class App extends Component {
 
   state = {
-    menuOpen: false
+    menuOpen: false,
+    userMenuOpen: false
   }
 
   menuStatusChanged = () => {
     this.setState({menuOpen: !this.state.menuOpen});
+  }
+
+  userMenuStatusChanged = () => {
+    this.setState({menuOpen: !this.state.userMenuOpen});
   }
 
   render() {
@@ -21,7 +27,8 @@ class App extends Component {
         <div className="App">
           <CssBaseline />
           <Layout menuOpen={this.state.menuOpen}
-            menuStatusChanged={this.menuStatusChanged}>
+            menuStatusChanged={this.menuStatusChanged}
+            user={this.props.user}>
             <Switch>
               {routes.map((rota, key) => {
                 if(rota.redirect)
@@ -40,4 +47,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    user: state.user.user
+  }
+}
+
+export default connect(mapStateToProps)(App);
