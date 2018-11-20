@@ -14,6 +14,7 @@ export const loginFailed = () => {
 }
 
 export const loginSuccess = value => {
+  console.log('[Info] Login succeeded with ' + JSON.stringify(value));
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
     value: value

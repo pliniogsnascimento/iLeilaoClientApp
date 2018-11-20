@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
 import ProductsCard from './ProductsCard';
-import Bid from './Bid';
+
 
 const styles = theme => ({
   layout: {
@@ -25,15 +25,17 @@ const styles = theme => ({
 const productsPanel = props => {
   const { classes } = props;
   const { products } = props;
+
+  const accountAccess = props.user ? props.user.conta.acessoConta : 0;
+
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
-      <Bid shouldBidOpen={props.shouldBidOpen}
-        bidClosedHandler={props.bidClosedHandler} />
       <Grid container spacing={40}>
         {products.map(product => (
           <Grid item key={product.id} sm={6} md={4} lg={3}>
             <ProductsCard product={product}
-              bidOpenedHandler={props.bidOpenedHandler} />
+              bidOpenedHandler={props.bidOpenedHandler}
+              accountAccess={accountAccess} />
           </Grid>
         ))}
       </Grid>

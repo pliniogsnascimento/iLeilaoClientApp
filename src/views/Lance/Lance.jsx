@@ -4,7 +4,7 @@ class Lance extends Component {
   render() {
     return(
       <div>
-        Lance
+        Lances
       </div>
     );
   }

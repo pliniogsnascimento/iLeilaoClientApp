@@ -45,27 +45,39 @@ const productCard = props => {
   const { product } = props;
   const { classes } = props;
 
+  let closeButton = null;
+  let bidButton = null;
+
+  if(props.accountAccess === 1) {
+    closeButton = <Button size="small" color="secondary">
+      Fechar Leilao
+    </Button>
+  }
+
+  if(props.accountAccess === 0) {
+    closeButton = <Button size="small" color="primary" onClick={() => props.bidOpenedHandler(product)} >
+    Dar lance
+  </Button>
+  }
+
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.cardMedia}
-        image={product.imagem} // eslint-disable-line max-len
+        image={product.imagem}
         title={product.descricao} />
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h6">
-          R$ {product.lanceMinimo},00
-                </Typography>
+          Lance R$ {product.lanceMinimo}
+        </Typography>
         <Typography>
           {product.descricao}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary" onClick={() => props.bidOpenedHandler(product)} >
-          Dar lance
-        </Button>
-        <Button size="small" color="secondary">
-          Fechar Leilao
-        </Button>
+        {bidButton}
+        {closeButton}
+        
       </CardActions>
     </Card>
   )

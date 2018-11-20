@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ApresentacaoLeilao from 'components/ApresentacaoLeilao/ApresentacaoLeilao';
-// import Modal from '@material-ui/core/Modal';
 import ProductsPanel from 'components/Products/ProductsPanel';
+
+import { Route } from 'react-router-dom';
+// import Lance from 'views/Lance/Lance';
+import Bid from 'views/Leilao/Bid';
 
 import { connect } from 'react-redux';
 
@@ -17,37 +20,37 @@ class Leilao extends Component {
   }
 
   componentWillMount() {
-    if(this.props.user === null)
-      this.props.history.push('/');
+    // if(this.props.user === null)
+    //   this.props.history.push('/');
+  }
+
+  addProductClickedHandler(event) {
+    event.preventDefault();
+    this.props.history.push('/leilao/produto');
   }
 
   componentDidMount() {
     this.props.fetchProducts();
   }
 
-  bidOpenedHandler = (product) => {
-    let bidState = {...this.state.bidStatus};
-    bidState.product = product;
-    bidState.isOpen = true;
-    this.setState({bidStatus: bidState});
+  bidOpenedHandler = product => {
+    this.props.history.push('/leilao/' + product.id);
   }
 
-  bidClosedHandler = () => {
-    let bidState = {...this.state.bidStatus};
-    bidState.product = null;
-    bidState.isOpen = false;
-    this.setState({bidStatus: bidState});
-  }
-
-  render() {
+render() {
     return (
         <main>
-          {/* <Modal></Modal> */}
-          <ApresentacaoLeilao />
-          <ProductsPanel products={this.props.products}
+          <ApresentacaoLeilao user={this.props.user}
+            addProductClickedHandler={event => this.addProductClickedHandler(event)}
+            />
+          <ProductsPanel user={this.props.user}
+            products={this.props.products}
+            selectedProduct={this.props.selectedProduct}
             shouldBidOpen={this.state.bidStatus.isOpen}
-            bidOpenedHandler={this.bidOpenedHandler}
-            bidClosedHandler={this.bidClosedHandler} />
+            bidOpenedHandler={this.bidOpenedHandler} />
+
+          <Route path={this.props.match.url + '/:id'} exact component={Bid} />
+
         </main>
     );
   }
@@ -56,13 +59,15 @@ class Leilao extends Component {
 const mapStateToProps = state => {
   return {
     products: state.products.products,
+    selectedProduto: state.products.selectedProduct,
     user: state.user.user
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProducts: () => dispatch(actionCreators.fetchProducts())
+    fetchProducts: () => dispatch(actionCreators.fetchProducts()),
+    fetchProductById: id => dispatch(actionCreators.fetchProductById(id))
   }
 }
 

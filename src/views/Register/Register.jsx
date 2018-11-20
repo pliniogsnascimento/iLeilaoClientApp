@@ -102,7 +102,7 @@ class Register extends Component {
     let newState = {...this.state.fields};
 
     for(let key in newState)
-      newState[key] = '';
+      newState[key].value = '';
 
     this.setState({fields: newState});
   }

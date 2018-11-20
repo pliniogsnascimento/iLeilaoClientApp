@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import routes from 'routes/routes';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Layout from 'components/Layout/Layout';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {connect} from 'react-redux';
+
+import Login from 'views/Login/Login';
+import Leilao from 'views/Leilao/Leilao';
+import Produto from 'views/Produto/Produto';
+import Register from 'views/Register/Register';
 
 class App extends Component {
 
@@ -23,26 +27,19 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <div className="App">
           <CssBaseline />
           <Layout menuOpen={this.state.menuOpen}
             menuStatusChanged={this.menuStatusChanged}
             user={this.props.user}>
             <Switch>
-              {routes.map((rota, key) => {
-                if(rota.redirect)
-                  return <Redirect exact from={rota.from} to={rota.to} key={key} />
-
-                if(rota.exact)
-                  return <Route exact path={rota.path} component={rota.component} key={key} />
-                
-                return <Route path={rota.path} component={rota.component} key={key} />
-              })}
+              <Route path="/leilao" component={Leilao} />
+              <Route path="/" component={Login} />
             </Switch>
           </Layout>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }

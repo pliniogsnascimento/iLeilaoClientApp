@@ -1,7 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-// import Grid from '@material-ui/core/Grid';
-// import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -22,6 +21,13 @@ const style = theme => ({
 const apresentacaoLeilao = props => {
   const { classes } = props;
 
+  let addProductButton = null;
+
+  if(props.user !== null && props.user.conta.acessoConta === 1)
+    addProductButton = <Button variant="outlined" size="large" color="primary" className={classes.button} onClick={props.addProductClickedHandler}>
+      Adicionar produto
+    </Button>
+
   return (
     <div className={classes.heroUnit}>
       <div className={classes.heroContent}>
@@ -34,23 +40,8 @@ const apresentacaoLeilao = props => {
           Basta adicionar o seu produto com um preço mínimo e começar!
         </Typography>
 
-        {/* <div className={classes.heroButtons}>
-          <Grid container spacing={16} justify="center">
+        {addProductButton}
 
-            <Grid item>
-              <Button variant="contained" color="primary">
-                Publicar
-              </Button>
-            </Grid>
-            
-            <Grid item>
-              <Button variant="outlined" color="primary">
-                Buscar seus itens
-              </Button>
-            </Grid>
-
-          </Grid>
-        </div> */}
       </div>
     </div>
   );
