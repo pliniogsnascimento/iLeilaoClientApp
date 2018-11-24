@@ -7,7 +7,3 @@ export {
 export {
   login
 } from './user';
-
-export {
-  createBid
-} from './bid';

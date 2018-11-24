@@ -29,6 +29,7 @@ export const login = userAccount => {
       .then(response => {
         dispatch(loginSuccess(response.data));
       }).catch(err => {
+        console.log('[ERROR] ' + err)
         dispatch(loginFailed());
       })
   }

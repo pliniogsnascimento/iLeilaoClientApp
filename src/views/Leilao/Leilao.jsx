@@ -3,8 +3,8 @@ import ApresentacaoLeilao from 'components/ApresentacaoLeilao/ApresentacaoLeilao
 import ProductsPanel from 'components/Products/ProductsPanel';
 
 import { Route } from 'react-router-dom';
-// import Lance from 'views/Lance/Lance';
 import Bid from 'views/Leilao/Bid';
+import CloseBid from './CloseBid';
 
 import { connect } from 'react-redux';
 
@@ -20,8 +20,8 @@ class Leilao extends Component {
   }
 
   componentWillMount() {
-    // if(this.props.user === null)
-    //   this.props.history.push('/');
+    if(this.props.user === null)
+      this.props.history.push('/');
   }
 
   addProductClickedHandler(event) {
@@ -37,6 +37,10 @@ class Leilao extends Component {
     this.props.history.push('/leilao/' + product.id);
   }
 
+  closeBidOpenedHandler = product => {
+    this.props.history.push('/leilao/' + product.id + '/close');
+  }
+
 render() {
     return (
         <main>
@@ -47,9 +51,11 @@ render() {
             products={this.props.products}
             selectedProduct={this.props.selectedProduct}
             shouldBidOpen={this.state.bidStatus.isOpen}
-            bidOpenedHandler={this.bidOpenedHandler} />
+            bidOpenedHandler={this.bidOpenedHandler}
+            closeBidOpenedHandler={this.closeBidOpenedHandler} />
 
           <Route path={this.props.match.url + '/:id'} exact component={Bid} />
+          <Route path={this.props.match.url + '/:id/close'} exact component={CloseBid} />
 
         </main>
     );

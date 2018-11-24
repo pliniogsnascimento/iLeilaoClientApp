@@ -35,6 +35,7 @@ const productsPanel = props => {
           <Grid item key={product.id} sm={6} md={4} lg={3}>
             <ProductsCard product={product}
               bidOpenedHandler={props.bidOpenedHandler}
+              closeBidOpenedHandler={props.closeBidOpenedHandler}
               accountAccess={accountAccess} />
           </Grid>
         ))}

@@ -47,18 +47,26 @@ const productCard = props => {
 
   let closeButton = null;
   let bidButton = null;
+  let bidPrice = null;
+
+  const status = product.status === 0 ? false : true;
 
   if(props.accountAccess === 1) {
-    closeButton = <Button size="small" color="secondary">
+    closeButton = <Button size="small" disabled={status} color="secondary" onClick={() => props.closeBidOpenedHandler(product)}>
       Fechar Leilao
     </Button>
   }
 
   if(props.accountAccess === 0) {
-    closeButton = <Button size="small" color="primary" onClick={() => props.bidOpenedHandler(product)} >
+    closeButton = <Button size="small" disabled={status} color="primary" onClick={() => props.bidOpenedHandler(product)} >
     Dar lance
   </Button>
   }
+
+  if(status) 
+    bidPrice = 'Leilão encerrado!';
+  else
+    bidPrice = 'Lance R$ ' + product.lanceMinimo;
 
   return (
     <Card className={classes.card}>
@@ -68,7 +76,7 @@ const productCard = props => {
         title={product.descricao} />
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h6">
-          Lance R$ {product.lanceMinimo}
+          {bidPrice}
         </Typography>
         <Typography>
           {product.descricao}

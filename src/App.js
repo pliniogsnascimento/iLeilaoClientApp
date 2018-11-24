@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Layout from 'components/Layout/Layout';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {connect} from 'react-redux';
@@ -34,7 +34,9 @@ class App extends Component {
             menuStatusChanged={this.menuStatusChanged}
             user={this.props.user}>
             <Switch>
+              <Route path={'/leilao/produto'} exact component={Produto} />
               <Route path="/leilao" component={Leilao} />
+              <Route path="/register-me" component={Register} />
               <Route path="/" component={Login} />
             </Switch>
           </Layout>

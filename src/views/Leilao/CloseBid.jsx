@@ -30,26 +30,27 @@ const styles = theme => ({
   }
 });
 
-class Bid extends Component {
+class CloseBid extends Component {
 
   state = {
     form: {
-      lance: ''
+      closePass: ''
     },
-    isValid: false,
+    isValid: true,
     errorMessage: '',
-    successOnBid: false
+    successOnBid: false,
+    buyer: null
   }
 
   componentWillMount() {
-    if(this.props.user === null)
+    if(this.props.userId === null)
       this.props.history.push('/');
   }
 
   handleChange = name => event => {
     let form = {...this.state.form};
     form[name] = event.target.value;
-    this.validateNumber(form[name]);
+    // this.validateNumber(form[name]);
     this.setState({form: form});
   }
 
@@ -63,31 +64,22 @@ class Bid extends Component {
     this.props.fetchProductById(this.props.match.params.id);
   }
 
-  validateNumber(number) {
-    if(number <= this.props.selectedProduct.lanceMinimo)
-      this.setState({isValid: false});
-    else
-      this.setState({isValid: true});
-  }
-
   bidClickedHandler(event) {
     event.preventDefault();
 
-    const bid = {
-      valor: this.state.form.lance,
-      participante: {
-        id: this.props.user.id
-      }
-    }
+    console.log(this.props.selectedProduct);
+
+    const produto = this.props.selectedProduct;
+
+    produto.status = 1;
 
     if(!this.state.isValid)
       this.setState({errorMessage: 'O valor digitado é inválido!'});
     else {
-      axios.post('api/v1/produtos/' + this.props.match.params.id + '/lances', bid)
+      axios.patch('api/v1/produtos/' + this.props.match.params.id, produto)
       .then(response => {
-        console.log(response.data);
+        this.setState({buyer: response.data});
         this.setState({successOnBid: true});
-        this.props.fetchProductById(this.props.match.params.id);
       }).catch(err => {
         console.log(err);
         this.setState({errorMessage: 'Ocorreu um erro!\nTente novamente mais tarde.'})
@@ -111,9 +103,9 @@ class Bid extends Component {
       successMessage = null;
     }
 
-    if(this.state.successOnBid) {
+    if(this.state.successOnBid && this.state.buyer !== null) {
       successMessage = <Typography variant="subtitle1" align="center" style={{color: 'green'}} >
-        Lance aceito
+        Leilao encerrado! Vendido para {this.state.buyer.nome}.<br/>Email: {this.state.buyer.conta.email}
       </Typography>;
       errorMessage = null;
     }
@@ -125,33 +117,32 @@ class Bid extends Component {
       onClose={() => this.close()} >
       <div className={classes.paper}>
         <Typography variant="h6" id="modal-title">
-          {selectedProduct.descricao}
+          Fechar leilao
         </Typography>
-        <img src={selectedProduct.imagem} alt={selectedProduct.descricao} style={{width: '330px', height: '200px'}} />
         <Typography variant="subtitle1" id="simple-modal-description">
-          Lance mínimo em R$ {selectedProduct.lanceMinimo}
+          Digite a senha de encerramento de {selectedProduct.descricao}
         </Typography>
 
         {errorMessage}
         {successMessage}
 
         <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="lance">Lance</InputLabel>
-          <Input id="lance"
+          <InputLabel htmlFor="close">Senha de Encerramento</InputLabel>
+          <Input id="close"
             autoFocus
-            type="number"
+            type="password"
             error={!this.state.isValid}
-            value={this.state.form.lance} 
-            onChange={this.handleChange('lance')} />
+            value={this.state.form.closePass} 
+            onChange={this.handleChange('closePass')} />
         </FormControl>
         <Button type="submit"
           fullWidth
           variant="contained"
           className={classes.button}
+          disabled={this.state.successOnBid}
           onClick={(event) => this.bidClickedHandler(event)} 
-          disabled={!this.state.isValid}
           >
-          Efetuar Lance
+          Encerrar
         </Button>
       </div>
     </Modal>
@@ -166,17 +157,16 @@ class Bid extends Component {
 
 const mapStateToProps = state => {
   return {
-    selectedProduct: state.products.selectedProduct,
-    user: state.user.user
+    selectedProduct: state.products.selectedProduct
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProductById: id => dispatch(actionCreators.fetchProductById(id)),
     clearSelectedProduct: () => dispatch(actionCreators.clearSelectedProduct()),
-    fetchProducts: () => dispatch(actionCreators.fetchProducts())
+    fetchProducts: () => dispatch(actionCreators.fetchProducts()),
+    fetchProductById: id => dispatch(actionCreators.fetchProductById(id))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Bid));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CloseBid));
